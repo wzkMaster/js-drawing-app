@@ -5,17 +5,6 @@ canvas.width = window.innerWidth;
 const ctx = canvas.getContext("2d");
 ctx.lineWidth = 5;
 
-// Selecting all the div that has a class of clr
-let clrs = document.querySelectorAll(".clr");
-// Converting NodeList to Array
-clrs = Array.from(clrs);
-
-clrs.forEach((clr) => {
-  clr.addEventListener("click", () => {
-    ctx.strokeStyle = clr.dataset.clr;
-  });
-});
-
 let clearBtn = document.querySelector(".clear");
 clearBtn.addEventListener("click", () => {
   // Clearning the entire canvas
@@ -33,16 +22,71 @@ saveBtn.addEventListener("click", () => {
   a.click();
 });
 
+const colorPicker = document.getElementById("colorpicker");
+const rangeSelector = document.getElementById("range");
+const rangePicker = document.getElementById("rangepicker");
+const rangeNum = document.getElementById("range-num");
+const rangeInner = document.querySelector("#range .inner");
+const popover = rangePicker.parentNode;
+const defaultColors = ["#f54242", "#f5d442", "#03bb56", "#0f65d4", "#e28743"];
+const colors = document.createElement("div");
+const setColor = (e) => {
+  const c = e.currentTarget.dataset.color;
+  ctx.strokeStyle = c;
+  rangeInner.style.backgroundColor = c;
+  colorPicker.value = c;
+};
+colors.className = "default-colors";
+defaultColors.forEach((color) => {
+  const colorNode = document.createElement("span");
+  colorNode.style.backgroundColor = color;
+  colorNode.setAttribute("data-color", color);
+  colorNode.classList.add("default-color");
+  colorNode.addEventListener("click", setColor);
+  colors.appendChild(colorNode);
+});
+popover.appendChild(colors);
+colorPicker.addEventListener("input", (e) => {
+  rangeInner.style.backgroundColor = e.target.value;
+});
+colorPicker.addEventListener("change", (e) => {
+  ctx.strokeStyle = e.target.value;
+});
+rangeSelector.addEventListener("click", () => {
+  const cb = (e) => {
+    if (
+      ![
+        ...popover.childNodes,
+        ...colors.childNodes,
+        rangeSelector,
+        rangeInner,
+      ].includes(e.target)
+    ) {
+      popover.style.display = "none";
+      time = 0;
+      document.removeEventListener("pointerdown", cb);
+    }
+  };
+  popover.style.display = "grid";
+  document.addEventListener("pointerdown", cb);
+});
+rangePicker.addEventListener("input", (e) => {
+  rangeNum.textContent = e.target.value;
+  rangeInner.style.width = `${e.target.value * 10}%`;
+  rangeInner.style.height = `${e.target.value * 10}%`;
+  ctx.lineWidth = Number(e.target.value);
+});
+
 let prevX, prevY, isDrawing;
 
-window.addEventListener("mousedown", () => {
+canvas.addEventListener("pointerdown", () => {
   isDrawing = true;
 });
-window.addEventListener("mouseup", () => {
+canvas.addEventListener("pointerup", () => {
   isDrawing = false;
 });
 
-window.addEventListener("mousemove", (e) => {
+canvas.addEventListener("pointermove", (e) => {
   // initially previous mouse positions are null
   // so we can't draw a line
   if (prevX == null || prevY == null || !isDrawing) {

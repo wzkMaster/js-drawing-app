@@ -1,28 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <title>JavaScript Drawing APP</title>
+  </head>
 
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="style.css">
-  <title>JavaScript Drawing APP</title>
-</head>
+  <body>
+    <canvas id="canvas"></canvas>
+    <div class="nav">
+      <div class="selector" id="range">
+        <div class="inner"></div>
+        <div class="popover" style="display: none">
+          <label for="rangepicker">粗细</label>
+          <input type="range" id="rangepicker" max="10" min="0" step="0.1" />
+          <div id="range-num">5</div>
+          <label for="colorpicker">颜色</label>
+          <input type="color" id="colorpicker" />
+        </div>
+      </div>
+      <button class="clear">清除</button>
+      <button class="save">保存</button>
+    </div>
 
-<body>
-  <canvas id="canvas"></canvas>
-  <div class="nav">
-    <div class="clr" data-clr="#000"></div>
-    <div class="clr" data-clr="#EF626C"></div>
-    <div class="clr" data-clr="#fdec03"></div>
-    <div class="clr" data-clr="#24d102"></div>
-    <div class="clr" data-clr="#fff"></div>
-    <button class="clear">clear</button>
-    <button class="save">save</button>
-  </div>
-
-
-  <script src="script.js"></script>
-</body>
-
+    <script src="script.js"></script>
+  </body>
 </html>
