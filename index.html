@@ -11,14 +11,24 @@
   <body>
     <canvas id="canvas"></canvas>
     <div class="nav">
-      <div class="selector" id="range">
-        <div class="inner"></div>
-        <div class="popover" style="display: none">
-          <label for="rangepicker">粗细</label>
-          <input type="range" id="rangepicker" max="10" min="0" step="0.1" />
-          <div id="range-num">5</div>
-          <label for="colorpicker">颜色</label>
-          <input type="color" id="colorpicker" />
+      <div
+        style="
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 5px;
+        "
+      >
+        调整画笔
+        <div class="selector" id="range">
+          <div class="inner"></div>
+          <div class="popover" style="display: none">
+            <label for="rangepicker">粗细</label>
+            <input type="range" id="rangepicker" max="10" min="0" step="0.1" />
+            <div id="range-num">5</div>
+            <label for="colorpicker">颜色</label>
+            <input type="color" id="colorpicker" />
+          </div>
         </div>
       </div>
       <button class="clear">清除</button>
