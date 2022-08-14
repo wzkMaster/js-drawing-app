@@ -83,6 +83,13 @@ canvas.addEventListener("pointerdown", () => {
   isDrawing = true;
 });
 canvas.addEventListener("pointerup", () => {
+  prevX = null;
+  prevY = null;
+  isDrawing = false;
+});
+canvas.addEventListener("pointercancel", () => {
+  prevX = null;
+  prevY = null;
   isDrawing = false;
 });
 
