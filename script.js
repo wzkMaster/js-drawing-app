@@ -1,16 +1,17 @@
+// 初始化canvas
 const canvas = document.getElementById("canvas");
 canvas.height = window.innerHeight;
 canvas.width = window.innerWidth;
-
 const ctx = canvas.getContext("2d");
 ctx.lineWidth = 5;
-const history = [];
 
+const history = [];
+// 清除按钮
 const clearBtn = document.querySelector(".clear");
 clearBtn.addEventListener("click", () => {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 });
-
+// 保存按钮
 const saveBtn = document.querySelector(".save");
 saveBtn.addEventListener("click", () => {
   const data = canvas.toDataURL("imag/png");
@@ -19,6 +20,7 @@ saveBtn.addEventListener("click", () => {
   a.download = "草图.png";
   a.click();
 });
+// 撤销按钮
 const undoBtn = document.querySelector(".undo");
 undoBtn.addEventListener("click", () => {
   console.log(history);
@@ -27,21 +29,23 @@ undoBtn.addEventListener("click", () => {
     ctx.putImageData(data, 0, 0);
   }
 });
+// 笔刷相关功能
 const colorPicker = document.getElementById("colorpicker");
 const rangeSelector = document.getElementById("range");
 const rangePicker = document.getElementById("rangepicker");
 const rangeNum = document.getElementById("range-num");
 const rangeInner = document.querySelector("#range .inner");
 const popover = rangePicker.parentNode;
+// 颜色设置
 const defaultColors = ["#f54242", "#f5d442", "#03bb56", "#0f65d4", "#e28743"];
 const colors = document.createElement("div");
+colors.className = "default-colors";
 const setColor = (e) => {
   const c = e.currentTarget.dataset.color;
   ctx.strokeStyle = c;
   rangeInner.style.backgroundColor = c;
   colorPicker.value = c;
 };
-colors.className = "default-colors";
 defaultColors.forEach((color) => {
   const colorNode = document.createElement("span");
   colorNode.style.backgroundColor = color;
@@ -57,6 +61,7 @@ colorPicker.addEventListener("input", (e) => {
 colorPicker.addEventListener("change", (e) => {
   ctx.strokeStyle = e.target.value;
 });
+// 点击其他地方，弹窗自动关闭
 rangeSelector.addEventListener("click", () => {
   const cb = (e) => {
     if (
@@ -81,40 +86,35 @@ rangePicker.addEventListener("input", (e) => {
   rangeInner.style.height = `${e.target.value * 10}%`;
   ctx.lineWidth = Number(e.target.value);
 });
-
+// 画布
 let prevX, prevY, isDrawing;
 const stop = () => {
   prevX = null;
   prevY = null;
   isDrawing = false;
 };
-canvas.addEventListener("pointerdown", () => {
+const start = () => {
   history.push(ctx.getImageData(0, 0, canvas.width, canvas.height));
   isDrawing = true;
-});
-canvas.addEventListener("pointerup", stop);
-// canvas.addEventListener("pointercancel", stop);
-canvas.addEventListener("pointermove", (e) => {
-  // initially previous mouse positions are null
-  // so we can't draw a line
+};
+const move = (e) => {
   if (prevX == null || prevY == null || !isDrawing) {
-    // Set the previous mouse positions to the current mouse positions
     prevX = e.clientX;
     prevY = e.clientY;
     return;
   }
 
-  // Current mouse position
   let currentX = e.clientX;
   let currentY = e.clientY;
 
-  // Drawing a line from the previous mouse position to the current mouse position
   ctx.beginPath();
   ctx.moveTo(prevX, prevY);
   ctx.lineTo(currentX, currentY);
   ctx.stroke();
 
-  // Update previous mouse position
   prevX = currentX;
   prevY = currentY;
-});
+};
+canvas.addEventListener("pointerdown", start);
+canvas.addEventListener("pointermove", move);
+canvas.addEventListener("pointerup", stop);
