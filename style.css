@@ -84,9 +84,17 @@ button {
 	border: none;
 	border-radius: 3px;
 	outline: none;
-	background-color: #03bb56;
+	background-color: #f44142;
 	color: #fff;
+	cursor: pointer;
+	transition: ease .3s;
+}
+button:hover {
+	transform: scale(1.1);
 }
 .save {
 	background-color: #0f65d4;
+}
+.undo {
+	background-color: #03bb56;
 }

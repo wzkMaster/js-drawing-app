@@ -4,24 +4,29 @@ canvas.width = window.innerWidth;
 
 const ctx = canvas.getContext("2d");
 ctx.lineWidth = 5;
+const history = [];
 
-let clearBtn = document.querySelector(".clear");
+const clearBtn = document.querySelector(".clear");
 clearBtn.addEventListener("click", () => {
-  // Clearning the entire canvas
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 });
-// Saving drawing as image
-let saveBtn = document.querySelector(".save");
+
+const saveBtn = document.querySelector(".save");
 saveBtn.addEventListener("click", () => {
-  let data = canvas.toDataURL("imag/png");
-  let a = document.createElement("a");
+  const data = canvas.toDataURL("imag/png");
+  const a = document.createElement("a");
   a.href = data;
-  // what ever name you specify here
-  // the image will be saved as that name
-  a.download = "sketch.png";
+  a.download = "草图.png";
   a.click();
 });
-
+const undoBtn = document.querySelector(".undo");
+undoBtn.addEventListener("click", () => {
+  console.log(history);
+  const data = history.pop();
+  if (data) {
+    ctx.putImageData(data, 0, 0);
+  }
+});
 const colorPicker = document.getElementById("colorpicker");
 const rangeSelector = document.getElementById("range");
 const rangePicker = document.getElementById("rangepicker");
@@ -78,21 +83,17 @@ rangePicker.addEventListener("input", (e) => {
 });
 
 let prevX, prevY, isDrawing;
-
+const stop = () => {
+  prevX = null;
+  prevY = null;
+  isDrawing = false;
+};
 canvas.addEventListener("pointerdown", () => {
+  history.push(ctx.getImageData(0, 0, canvas.width, canvas.height));
   isDrawing = true;
 });
-canvas.addEventListener("pointerup", () => {
-  prevX = null;
-  prevY = null;
-  isDrawing = false;
-});
-canvas.addEventListener("pointercancel", () => {
-  prevX = null;
-  prevY = null;
-  isDrawing = false;
-});
-
+canvas.addEventListener("pointerup", stop);
+// canvas.addEventListener("pointercancel", stop);
 canvas.addEventListener("pointermove", (e) => {
   // initially previous mouse positions are null
   // so we can't draw a line
