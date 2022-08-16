@@ -6,6 +6,13 @@ const ctx = canvas.getContext("2d");
 ctx.lineWidth = 5;
 
 const history = [];
+// 上传按钮
+const uploadBtn = document.querySelector(".upload");
+uploadBtn.addEventListener("click", () => {
+  alert("上传图片会覆盖现有画作！");
+});
+const uploadInput = document.querySelector(".upload input");
+uploadInput.addEventListener("change", readFile);
 // 清除按钮
 const clearBtn = document.querySelector(".clear");
 clearBtn.addEventListener("click", () => {
@@ -118,3 +125,26 @@ const move = (e) => {
 canvas.addEventListener("pointerdown", start);
 canvas.addEventListener("pointermove", move);
 canvas.addEventListener("pointerup", stop);
+
+function readFile(e) {
+  console.log(e);
+  const file = this.files[0];
+  console.log(file);
+  if (!/image\/\w+/.test(file.type)) {
+    alert("请确保文件为图像类型");
+    return false;
+  }
+  const reader = new FileReader();
+  reader.readAsDataURL(file);
+  reader.onload = function (e) {
+    drawToCanvas(this.result);
+  };
+}
+
+function drawToCanvas(imgData) {
+  const img = new Image();
+  img.src = imgData;
+  img.onload = function () {
+    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+  };
+}

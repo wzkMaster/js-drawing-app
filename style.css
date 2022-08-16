@@ -98,3 +98,13 @@ button:hover {
 .undo {
 	background-color: #03bb56;
 }
+.upload {
+	background-color: violet;
+}
+.upload input {
+	display: inline-block;
+	width: 100%;
+	height: 100%;
+	opacity: 0;
+	position: absolute;
+}
