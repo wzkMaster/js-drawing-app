@@ -3,6 +3,7 @@
 	padding: 0;
 	box-sizing: border-box;
 	touch-action: none;
+	overflow: hidden;
 }
 label {
 	font-size: 14px;
@@ -107,4 +108,5 @@ button:hover {
 	height: 100%;
 	opacity: 0;
 	position: absolute;
+	cursor: pointer;
 }
